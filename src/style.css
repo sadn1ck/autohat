@@ -1,0 +1,75 @@
+@import 'nes.css/css/nes.css';
+
+:root {
+	--default-font: 'Press Start 2P';
+	--toolbar-height: 100px;
+}
+
+html {
+	font-family: var(--default-font);
+	image-rendering: pixelated;
+	height: 100%;
+	width: 100vw;
+	overflow: hidden;
+	padding: 8px;
+}
+
+body,
+#app {
+	height: 100%;
+	width: 100%;
+	user-select: none;
+}
+
+kbd {
+	font-family: var(--default-font);
+	outline: 2px solid #232323;
+	padding: 2px 4px;
+	border-radius: 2px;
+}
+
+kbd ~ kbd {
+	margin-left: 8px;
+}
+
+.root {
+	height: 100%;
+}
+
+.autohat__canvas {
+	height: calc(100% - var(--toolbar-height));
+	width: 100%;
+	flex-grow: 0;
+	flex-shrink: 0;
+}
+
+.autohat__canvas-inner {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.autohat__canvas-loaded {
+	height: 100%;
+	width: 100%;
+	image-rendering: auto;
+	display: grid;
+	place-items: center;
+}
+
+.autohat__canvas-loaded-image {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+	image-rendering: auto;
+}
+
+.autohat__toolbar {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	height: var(--toolbar-height);
+}
