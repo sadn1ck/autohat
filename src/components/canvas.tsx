@@ -1,7 +1,8 @@
 import { batch } from '@preact/signals';
+import { Canvas as FabricCanvas } from 'fabric';
 import { TargetedEvent, useEffect, useRef } from 'preact/compat';
 import { appState, FACE_DETECTION_CANVAS_ID } from '../state';
-import { drawImageToCanvasAt2x, newId } from '../utils';
+import { addImageToFabricCanvas, newId } from '../utils';
 
 function handleImageChange(event: TargetedEvent<HTMLInputElement, Event>) {
 	const target = event.target as HTMLInputElement;
@@ -36,14 +37,25 @@ function handleImageChange(event: TargetedEvent<HTMLInputElement, Event>) {
 const LoadedCanvas = () => {
 	const currentImage = appState.currentImage;
 	const ref = useRef<HTMLImageElement>(null);
-	const canvasRef = useRef<HTMLCanvasElement>(null);
+
+	// new canvas for fabric
+	const canvasContainerRef = useRef<HTMLCanvasElement>(null);
+	const fabricCanvas = useRef<FabricCanvas>(null);
 
 	useEffect(() => {
+		fabricCanvas.current = new FabricCanvas(canvasContainerRef.current, {
+			selection: true
+		});
+
 		const observer = new ResizeObserver((entries) => {
-			const canvas = canvasRef.current;
+			const fbCanvas = fabricCanvas.current;
 			const imageDims = entries[0].contentRect;
-			if (!canvas) return;
-			drawImageToCanvasAt2x(canvas, ref.current, imageDims);
+			fbCanvas.setDimensions({
+				width: imageDims.width,
+				height: imageDims.height
+			});
+
+			addImageToFabricCanvas(fbCanvas, ref.current, imageDims);
 		});
 		observer.observe(ref.current);
 
@@ -60,7 +72,16 @@ const LoadedCanvas = () => {
 				alt={currentImage.file.name}
 				ref={ref}
 			/>
-			<canvas id={FACE_DETECTION_CANVAS_ID} class={'autohat__canvas-loaded-canvasel'} ref={canvasRef} />
+			<div
+				style={{
+					position: 'absolute'
+				}}>
+				<canvas
+					id={FACE_DETECTION_CANVAS_ID}
+					class={'autohat__canvas-loaded-canvasel'}
+					ref={canvasContainerRef}
+				/>
+			</div>
 		</div>
 	);
 };

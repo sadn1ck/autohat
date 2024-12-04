@@ -1,4 +1,5 @@
 import { deepSignal } from 'deepsignal';
+import { Canvas as FabricCanvas, FabricImage } from 'fabric';
 import { customAlphabet } from 'nanoid';
 
 export function fetchWithProgress(url: string, onComplete: (response: ArrayBuffer) => void) {
@@ -34,3 +35,17 @@ export function drawImageToCanvasAt2x(
 
 const idSpace = customAlphabet('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 16);
 export const newId = () => idSpace(16);
+
+export function addImageToFabricCanvas(
+	canvas: FabricCanvas,
+	imageElement: HTMLImageElement,
+	imageDims: { width: number; height: number }
+) {
+	const image = new FabricImage(imageElement, {
+		selectable: false
+	});
+
+	image.scale(Math.max(imageDims.width / imageElement.naturalWidth, imageDims.height / imageElement.naturalHeight));
+
+	canvas.add(image);
+}

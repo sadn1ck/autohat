@@ -68,9 +68,13 @@ kbd ~ kbd {
 	image-rendering: auto;
 	margin: auto;
 	opacity: 0%;
+
+	position: absolute;
+	pointer-events: none;
 }
 
-.autohat__canvas-loaded-canvasel {
+.autohat__canvas-loaded-canvasel .lower-canvas,
+.autohat__canvas-loaded-canvasel .upper-canvas {
 	position: absolute;
 	inset: 0;
 	top: 50%;
