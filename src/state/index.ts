@@ -1,6 +1,4 @@
-import { effect } from '@preact/signals';
 import { deepSignal } from 'deepsignal';
-import { customAlphabet } from 'nanoid';
 
 export type UserFile = {
 	id: string;
@@ -42,10 +40,14 @@ export const appState = deepSignal<AppState>({
 	}
 });
 
-effect(() => {
-	console.log(appState.images);
+type WasmState = {
+	state: 'loading' | 'loaded' | 'error';
+	progress: number;
+};
+
+export const wasmState = deepSignal<WasmState>({
+	state: 'loading',
+	progress: 0
 });
 
-const idSpace = customAlphabet('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 16);
-
-export const newId = () => idSpace(16);
+export const FACE_DETECTION_CANVAS_ID = 'face-detector-canvas-el';
