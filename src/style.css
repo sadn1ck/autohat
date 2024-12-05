@@ -19,6 +19,10 @@ html {
 	padding: 8px;
 }
 
+.is-disabled {
+	pointer-events: none;
+}
+
 body,
 #app {
 	height: 100%;
@@ -103,10 +107,10 @@ kbd ~ kbd {
 progress.autohat__status {
 	position: absolute;
 	bottom: 0;
-	opacity: 80%;
+	opacity: 60%;
 	border: none;
 	transition: all 0.5s ease-in-out;
 	pointer-events: none;
-	height: 16px;
+	height: 10px;
 	border-radius: 16px;
 }

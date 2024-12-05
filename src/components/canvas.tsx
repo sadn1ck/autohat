@@ -3,35 +3,55 @@ import { Canvas as FabricCanvas } from 'fabric';
 import { TargetedEvent, useEffect, useRef } from 'preact/compat';
 import { appState, CANVAS_PADDING, canvasState, FACE_DETECTION_CANVAS_ID } from '../state';
 import { addImageToFabricCanvas, newId } from '../utils';
+import { Icon } from './icon';
+
+function addFileToAppState(file: File) {
+	const id = newId();
+
+	const blobUrl = URL.createObjectURL(file);
+	batch(() => {
+		appState.currentImageId = id;
+		appState.images[id] = {
+			id,
+			file,
+			blobUrl,
+			naturalWidth: 0,
+			naturalHeight: 0,
+			state: 'loading'
+		};
+	});
+	const image = new Image();
+	image.src = blobUrl;
+	image.onload = () => {
+		batch(() => {
+			appState.images[id].naturalWidth = image.naturalWidth;
+			appState.images[id].naturalHeight = image.naturalHeight;
+			appState.images[id].state = 'loaded';
+		});
+	};
+}
 
 function handleImageChange(event: TargetedEvent<HTMLInputElement, Event>) {
 	const target = event.target as HTMLInputElement;
 	const file = target.files?.[0];
 	if (file) {
-		const id = newId();
-
-		const blobUrl = URL.createObjectURL(file);
-		batch(() => {
-			appState.currentImageId = id;
-			appState.images[id] = {
-				id,
-				file,
-				blobUrl,
-				naturalWidth: 0,
-				naturalHeight: 0,
-				state: 'loading'
-			};
-		});
-		const image = new Image();
-		image.src = blobUrl;
-		image.onload = () => {
-			batch(() => {
-				appState.images[id].naturalWidth = image.naturalWidth;
-				appState.images[id].naturalHeight = image.naturalHeight;
-				appState.images[id].state = 'loaded';
-			});
-		};
+		addFileToAppState(file);
 	}
+}
+
+function handlePaste(event: ClipboardEvent) {
+	const items = event.clipboardData?.items;
+	if (!items) return;
+
+	console.log(Array.from(items));
+
+	const imageItem = Array.from(items).find((item) => item.type.includes('image'));
+	if (!imageItem) return;
+
+	const blob = imageItem.getAsFile();
+	if (!blob) return;
+
+	addFileToAppState(blob);
 }
 
 const LoadedCanvas = () => {
@@ -107,6 +127,13 @@ const LoadedCanvas = () => {
 export const Canvas = () => {
 	const isCurrentImageLoaded = appState.isCurrentImageLoaded;
 
+	useEffect(() => {
+		window.addEventListener('paste', handlePaste);
+		return () => {
+			window.removeEventListener('paste', handlePaste);
+		};
+	}, []);
+
 	return (
 		<div class={'autohat__canvas-inner'}>
 			{appState.noCurrentImage ? (
@@ -117,7 +144,15 @@ export const Canvas = () => {
 							<kbd>v</kbd>
 						</p>
 						<label htmlFor="image-input" class="nes-btn">
-							<span>Or select image</span>
+							<span
+								style={{
+									display: 'inline-flex',
+									alignItems: 'center',
+									gap: 8,
+									verticalAlign: 'middle'
+								}}>
+								Or select image <Icon icon="image-new" size="md" />
+							</span>
 							<input
 								id="image-input"
 								aria-label="Select image"
