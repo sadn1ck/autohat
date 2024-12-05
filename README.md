@@ -1,15 +1,7 @@
-# `create-preact`
+# autohat
 
-<h2 align="center">
-  <img height="256" width="256" src="./src/assets/preact.svg">
-</h2>
+christmas time!! automatically add hats for your friends!!
 
-<h3 align="center">Get started using Preact and Vite!</h3>
+> I tried to use mediapipe's face detector to automatically add a hat above the person's head, but it doesn't really work that well lmao.
 
-## Getting Started
-
-- `pnpm dev` - Starts a dev server at http://localhost:5173/
-
-- `pnpm build` - Builds for production, emitting to `dist/`. Prerenders app to static HTML
-
-- `pnpm preview` - Starts a server at http://localhost:4173/ to test production build locally
+Please recommend more Christmas hats and how to reduce the number ofbuttons.
