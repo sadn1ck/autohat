@@ -161,6 +161,30 @@ export const Canvas = () => {
 								onChange={handleImageChange}
 							/>
 						</label>
+						<p class={'autohat__madeby'}>
+							Made by <a href="https://x.com/__sadn1ck__">@sadn1ck</a>. Works offline.
+						</p>
+						<div class={'autohat__canvas-help'}>
+							<p>From left to right</p>
+							<p>
+								<Icon icon="add-box" size="md" /> Add hat
+							</p>
+							<p>
+								<Icon icon="zap" size="md" /> Auto add hats (kinda)
+							</p>
+							<p>
+								<Icon icon="save" size="md" /> Save image
+							</p>
+							<p>
+								<Icon icon="sync" size="md" /> Flip selected object
+							</p>
+							<p>
+								<Icon icon="delete" size="md" /> Delete selected object
+							</p>
+							<p>
+								<Icon icon="trash-alt" size="md" /> Clear canvas
+							</p>
+						</div>
 					</div>
 				</>
 			) : (

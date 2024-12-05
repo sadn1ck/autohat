@@ -23,6 +23,10 @@ class CustomFaceDetector {
 	detector: FaceDetector;
 
 	constructor() {
+		if (typeof window === 'undefined') {
+			return;
+		}
+
 		this.setupCache().then(() => {
 			this.init();
 		});

@@ -61,6 +61,28 @@ kbd ~ kbd {
 	justify-content: center;
 }
 
+.autohat__canvas-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.autohat__canvas-help {
+	text-align: left;
+	margin-top: 36px;
+	padding-left: 16px;
+	font-size: 70%;
+}
+
+.autohat__canvas-help > p {
+	display: inline-flex;
+	align-items: center;
+	gap: 16px;
+}
+.autohat__canvas-help svg {
+	margin-top: -2px;
+}
+
 .autohat__canvas-loaded {
 	height: 100%;
 	width: 100%;
@@ -113,4 +135,13 @@ progress.autohat__status {
 	pointer-events: none;
 	height: 10px;
 	border-radius: 16px;
+}
+
+.autohat__madeby {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	text-align: center;
+	font-size: 70%;
 }
