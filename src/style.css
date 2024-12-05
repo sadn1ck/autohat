@@ -68,6 +68,9 @@ kbd ~ kbd {
 	justify-content: center;
 }
 .autohat__canvas-help {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
 	text-align: left;
 	margin-top: 36px;
 	padding-left: 16px;
