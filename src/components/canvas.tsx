@@ -1,7 +1,7 @@
 import { batch } from '@preact/signals';
 import { Canvas as FabricCanvas } from 'fabric';
 import { TargetedEvent, useEffect, useRef } from 'preact/compat';
-import { appState, FACE_DETECTION_CANVAS_ID } from '../state';
+import { appState, CANVAS_PADDING, canvasState, FACE_DETECTION_CANVAS_ID } from '../state';
 import { addImageToFabricCanvas, newId } from '../utils';
 
 function handleImageChange(event: TargetedEvent<HTMLInputElement, Event>) {
@@ -43,19 +43,37 @@ const LoadedCanvas = () => {
 	const fabricCanvas = useRef<FabricCanvas>(null);
 
 	useEffect(() => {
-		fabricCanvas.current = new FabricCanvas(canvasContainerRef.current, {
-			selection: true
+		const fbc = new FabricCanvas(canvasContainerRef.current, {
+			selection: true,
+			centeredScaling: true
 		});
+		fabricCanvas.current = fbc;
+
+		canvasState.$fabric.value = {
+			canvas: fbc,
+			width: 0,
+			height: 0
+		};
 
 		const observer = new ResizeObserver((entries) => {
 			const fbCanvas = fabricCanvas.current;
 			const imageDims = entries[0].contentRect;
-			fbCanvas.setDimensions({
+
+			canvasState.$fabric.value = {
+				canvas: fbCanvas,
 				width: imageDims.width,
 				height: imageDims.height
-			});
+			};
 
-			addImageToFabricCanvas(fbCanvas, ref.current, imageDims);
+			fbCanvas.setDimensions({
+				width: imageDims.width + CANVAS_PADDING * 2,
+				height: imageDims.height + CANVAS_PADDING * 2
+			});
+			const imageScale = Math.max(
+				imageDims.width / currentImage.naturalWidth,
+				imageDims.height / currentImage.naturalHeight
+			);
+			addImageToFabricCanvas(fbCanvas, ref.current, imageDims, imageScale);
 		});
 		observer.observe(ref.current);
 

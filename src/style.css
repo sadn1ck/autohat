@@ -5,12 +5,17 @@
 	--toolbar-height: 100px;
 }
 
+@media (max-width: 400px) {
+	:root {
+		--toolbar-height: 140px;
+	}
+}
+
 html {
 	font-family: var(--default-font);
 	image-rendering: pixelated;
 	height: 100%;
 	width: 100vw;
-	overflow: hidden;
 	padding: 8px;
 }
 
@@ -19,6 +24,7 @@ body,
 	height: 100%;
 	width: 100%;
 	user-select: none;
+	overflow: hidden;
 }
 
 kbd {
@@ -85,6 +91,8 @@ kbd ~ kbd {
 .autohat__toolbar {
 	display: flex;
 	flex-direction: row;
+	flex-wrap: wrap;
+	gap: 8px;
 	align-items: center;
 	justify-content: center;
 	height: var(--toolbar-height);
@@ -92,11 +100,13 @@ kbd ~ kbd {
 	position: relative;
 }
 
-.autohat__status {
+progress.autohat__status {
 	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	left: 0;
-	right: 0;
-	opacity: 50%;
+	bottom: 0;
+	opacity: 80%;
+	border: none;
+	transition: all 0.5s ease-in-out;
+	pointer-events: none;
+	height: 16px;
+	border-radius: 16px;
 }

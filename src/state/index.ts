@@ -1,4 +1,5 @@
 import { deepSignal } from 'deepsignal';
+import { Canvas as FabricCanvas } from 'fabric';
 
 export type UserFile = {
 	id: string;
@@ -10,18 +11,7 @@ export type UserFile = {
 	state: 'loading' | 'loaded';
 };
 
-type AppState = {
-	images: Record<string, UserFile>;
-	currentImageId: string | null;
-
-	readonly noCurrentImage: boolean;
-	readonly currentImage: UserFile | null;
-	readonly isCurrentImageLoaded: boolean;
-
-	deleteCurrentImage: () => void;
-};
-
-export const appState = deepSignal<AppState>({
+export const appState = deepSignal({
 	images: {},
 	currentImageId: null,
 	get noCurrentImage() {
@@ -31,12 +21,36 @@ export const appState = deepSignal<AppState>({
 		return appState.images[appState.currentImageId] ?? null;
 	},
 	get isCurrentImageLoaded() {
-		const currentImage = appState.currentImage;
+		const currentImage = appState.images[appState.currentImageId];
 		return currentImage?.state === 'loaded';
 	},
-	deleteCurrentImage: () => {
+	clearCanvas: () => {
 		appState.images[appState.currentImageId] = undefined;
 		appState.currentImageId = null;
+	}
+});
+
+type CanvasState = {
+	fabric: {
+		canvas: FabricCanvas | null;
+		width: number;
+		height: number;
+	};
+	deleteCurrentSelectedObject: () => void;
+};
+
+export const canvasState = deepSignal<CanvasState>({
+	fabric: {
+		canvas: null,
+		width: 0,
+		height: 0
+	},
+	deleteCurrentSelectedObject: () => {
+		const fb = canvasState.fabric.canvas;
+		if (!fb) return;
+		const selectedObjects = fb.getActiveObject();
+		if (!selectedObjects) return;
+		fb.remove(selectedObjects);
 	}
 });
 
@@ -51,3 +65,5 @@ export const wasmState = deepSignal<WasmState>({
 });
 
 export const FACE_DETECTION_CANVAS_ID = 'face-detector-canvas-el';
+
+export const CANVAS_PADDING = 50;
